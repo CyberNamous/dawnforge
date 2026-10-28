@@ -1,0 +1,13 @@
+{
+  // DawnForge: Cloudflare Worker + D1
+  "name": "dawnforge",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-01",
+  // Keeps variables/secrets you set in the Cloudflare dashboard (e.g. OWNER_SECRET_TOKEN) on every deploy
+  "keep_vars": true,
+  // Static frontend; the Worker only runs first for /api/*
+  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "dawnforge-db", "database_id": "REPLACE_WITH_YOUR_D1_ID" }
+  ]
+}
