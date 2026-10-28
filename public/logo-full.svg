@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 64" width="300" height="64" role="img" aria-label="DawnForge">
+  <rect width="300" height="64" rx="12" fill="#0f131a"/>
+  <g transform="translate(8 8) scale(1)">
+    <rect x="1" y="1" width="46" height="46" rx="10" fill="#151a23" stroke="#2b3445" stroke-width="1.5"/>
+    <path d="M11 27A13 13 0 0 1 37 27Z" fill="#f2a93b"/>
+    <g stroke="#f2a93b" stroke-width="2" stroke-linecap="round"><path d="M24 6v4"/><path d="M10 12l3 3"/><path d="M38 12l-3 3"/></g>
+    <polygon points="4,29 44,29 44,33 32,33 32,38 36,38 36,43 12,43 12,38 16,38 16,33 12,33" fill="#f8fafc"/>
+  </g>
+  <text x="68" y="40" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" letter-spacing="5" fill="#f8fafc">DAWN<tspan fill="#f2a93b">FORGE</tspan></text>
+</svg>

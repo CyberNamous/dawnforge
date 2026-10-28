@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f131a">
+<title>DawnForge</title>
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<style>
+:root{--bg:#0f131a;--bg2:#151a23;--card:#1a202b;--card2:#202737;--line:#2b3445;--fg:#f8fafc;--mut:#8a99ae;--acc:#f2a93b;--ta:#6ea8ff;--tb:#f2a93b;--r:12px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;color:var(--fg);font:clamp(14px,.9vw + 11px,16px)/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+background:radial-gradient(1200px 500px at 50% -120px,#243049 0,transparent 70%),linear-gradient(180deg,var(--bg2),var(--bg) 480px) var(--bg);background-attachment:fixed}
+header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;gap:clamp(10px,3vw,32px);min-height:58px;padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left));padding-top:env(safe-area-inset-top);background:rgba(15,19,26,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:clamp(13px,3.4vw,16px);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand img{display:block;flex:0 0 auto}
+nav{display:flex;gap:clamp(10px,2.5vw,24px);flex:1;min-width:0}
+button,select,input{font:inherit;color:var(--fg)}
+.lnk{background:none;border:0;color:var(--mut);cursor:pointer;padding:18px 0 16px;border-bottom:2px solid transparent;font-size:.92em;white-space:nowrap;min-height:44px;transition:color .15s,border-color .15s}
+.lnk.on,.lnk:hover{color:var(--fg);border-bottom-color:var(--acc)}
+#login{border:1px solid var(--line);border-radius:8px;padding:8px 14px;min-height:38px;color:var(--fg);background:var(--card)}
+#login:hover{border-color:var(--acc)}
+main{width:100%;max-width:1180px;margin:0 auto;padding:calc(78px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 48px max(16px,env(safe-area-inset-left))}
+@media(min-width:1700px){main{max-width:1400px}}
+.hero{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;padding:clamp(18px,3vw,32px);margin-bottom:8px;border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(135deg,#222c40,#171d29 70%);position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--acc)}
+.eyebrow{margin:0 0 4px;font-size:.75em;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);font-weight:700}
+h1{margin:0 0 6px;font-size:clamp(22px,4.5vw,38px);line-height:1.15;letter-spacing:-.01em}
+.hero p.mut{margin:0;max-width:46ch}
+.kpis{display:flex;gap:10px}
+.kpis div{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:10px 16px;text-align:center;min-width:92px}
+.kpis b{display:block;font-size:1.6em;line-height:1.2}
+.kpis span{font-size:.72em;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
+h2{font-size:.74em;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);font-weight:700;margin:30px 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:clamp(14px,2.2vw,22px);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.tm{border-top:3px solid var(--ta)}.tm.tb{border-top-color:var(--tb)}
+.tm h2{margin-top:0}.ta h2{color:var(--ta)}.tb h2{color:var(--tb)}
+input[type=text],select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:11px 12px;width:100%;min-height:44px;font-size:16px;transition:border-color .15s}
+input[type=text]:focus,select:focus{outline:none;border-color:var(--acc)}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--acc);vertical-align:middle;margin-right:6px}
+label{display:block;color:var(--mut);font-size:.85em}label select{margin-top:4px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin:12px 0}
+.row>*{flex:1;min-width:140px}
+.btn{background:var(--acc);color:#1b1305;border:0;border-radius:8px;padding:11px 22px;min-height:44px;cursor:pointer;font-weight:700;flex:0 0 auto;transition:filter .15s}
+.btn:hover{filter:brightness(1.08)}
+.btn.flat{background:transparent;color:var(--fg);border:1px solid var(--mut)}.btn.flat:hover{border-color:var(--acc)}
+.mut{color:var(--mut)}
+.bar{display:grid;grid-template-columns:64px 1fr 28px;align-items:center;gap:12px;margin:10px 0;font-size:.9em}
+.bar b{font-weight:600}.bar span{height:8px;background:var(--bg);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#c9821a,var(--acc));border-radius:99px;transition:width .5s ease}
+.bar em{font-style:normal;text-align:right;color:var(--mut)}
+.split{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:16px;align-items:start}
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.slot{display:flex;align-items:center;gap:10px;padding:9px 8px;border-bottom:1px solid var(--line);font-size:.95em;border-radius:6px;transition:background .15s}
+.slot:last-child{border-bottom:0}
+.slot.adm{cursor:pointer}.slot.adm:hover,.slot.sel{background:var(--card2)}
+.slot .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip{font-style:normal;font-size:.7em;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:2px 9px;min-width:62px;text-align:center}
+.av{width:28px;height:28px;border-radius:50%;background:var(--card2);border:1px solid var(--line);display:grid;place-items:center;font-size:.75em;font-weight:700;color:var(--acc);flex:0 0 auto}
+.av.e{color:var(--mut);opacity:.5}
+table{width:100%;border-collapse:collapse;font-size:.92em;min-width:520px}
+td,th{padding:10px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--mut);font-weight:600;font-size:.8em;text-transform:uppercase;letter-spacing:.08em}
+tbody tr:hover,tr[data-sel]:hover{background:var(--card2)}
+.x{background:none;border:1px solid var(--line);border-radius:6px;color:var(--mut);cursor:pointer;padding:5px 10px;min-height:32px}.x:hover{color:var(--fg);border-color:#ef6b6b}
+.err{color:#ffb4b4;margin-top:8px;font-size:.88em}
+.empty{color:var(--mut);padding:10px 4px}
+@media(max-width:960px){.split{grid-template-columns:1fr}}
+@media(max-width:720px){.hero{grid-template-columns:1fr}.kpis div{flex:1;min-width:0;padding:10px 6px}}
+@media(max-width:560px){.teams{grid-template-columns:1fr}.row>*{min-width:100%}.btn{width:100%}.bar{grid-template-columns:54px 1fr 24px}header{gap:10px}}
+@media(max-width:380px){.lnk{font-size:.82em}#login{padding:7px 10px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<header><div class="brand"><img src="logo.svg" alt="" width="30" height="30">DAWNFORGE</div>
+<nav><button class="lnk on" id="n-home">Home</button><button class="lnk" id="n-teams">Teams Dashboard</button></nav>
+<button class="lnk" id="login">Login</button></header>
+<main id="app"></main>
+<script>
+const ROLES=['Jungle','Roam','Mid','Gold','EXP'],OPT=[...ROLES,'None'];
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let view='home',sel=null,msg='';
+let data={version:0,players:[]};
+try{const c=JSON.parse(localStorage.getItem('df_cache_data'));if(c&&Array.isArray(c.players))data=c}catch(e){localStorage.removeItem('df_cache_data')}
+const ign=()=>localStorage.getItem('registered_ign'),admin=()=>localStorage.getItem('df_admin')==='true';
+const tok=()=>localStorage.getItem('df_token')||'';
+
+async function api(path,body,isAdmin){
+  const r=await fetch(path,{method:body?'POST':'GET',headers:{'content-type':'application/json',...(isAdmin?{'x-owner-token':tok()}:{})},body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,j};
+}
+let busy=false;
+async function pull(){ // exactly one full bundle query (guarded against overlap)
+  if(busy)return;busy=true;
+  try{const{ok,j}=await api('/api/bundle');if(!ok)return;
+  localStorage.removeItem('df_cache_data');data=j;
+  localStorage.setItem('df_cache_data',JSON.stringify(j));render();}catch(e){}finally{busy=false}
+}
+async function poll(){
+  try{const{j}=await api('/api/poll?v='+data.version);if(j.changed)await pull();}catch(e){}
+}
+async function act(path,body){
+  const r=await api(path,body,true);
+  if(r.status===401){logout();return}
+  msg=r.ok?'':(r.j.error||'Error');
+  if(r.ok)await pull();else render();
+}
+function logout(){localStorage.removeItem('df_admin');localStorage.removeItem('df_token');sel=null;render()}
+
+const av=n=>`<span class="av${n?'':' e'}">${n?esc(n.slice(0,2).toUpperCase()):'+'}</span>`;
+function hero(){const P=data.players,t=P.filter(p=>p.assigned_team).length,h=view==='home';return `<section class="hero"><div><p class="eyebrow">${h?'Community Tournament':'Teams Dashboard'}</p><h1>${h?'Forge your lineup.':'Live match distribution'}</h1><p class="mut">${h?'Register once, then follow your team placement in real time.':'Rosters update automatically as the organiser makes changes.'}</p></div><div class="kpis"><div><b>${P.length}</b><span>Players</span></div><div><b>${t}</b><span>In teams</span></div><div><b>${P.length-t}</b><span>Subs</span></div></div></section>`}
+function pane(){
+  const P=data.players,adm=admin();
+  const team=t=>`<div class="card tm ${t==='Team A'?'ta':'tb'}"><h2>${t.toUpperCase()}</h2>`+ROLES.map(r=>{
+    const p=P.find(x=>x.assigned_team===t&&x.assigned_role===r);
+    return `<div class="slot ${adm&&p?'adm':''} ${p&&sel===p.id?'sel':''}" ${adm&&p?`data-sel="${p.id}"`:''}>${av(p&&p.ign)}<span class="n">${p?esc(p.ign):'<span class="mut">Open slot</span>'}</span><em class="chip">${r}</em></div>`}).join('')+'</div>';
+  const subs=P.filter(p=>!p.assigned_team);
+  return `<h2>Match Distribution</h2><div class="split"><div class="teams">${team('Team A')}${team('Team B')}</div>
+  <div class="card"><h2 style="margin-top:0">SUBSTITUTE POOL</h2>${subs.map(p=>`<div class="slot ${adm?'adm':''} ${sel===p.id?'sel':''}" ${adm?`data-sel="${p.id}"`:''}>${av(p.ign)}<span class="n">${esc(p.ign)}</span><em class="chip">${p.main_role}</em></div>`).join('')||'<div class="empty">No substitutes</div>'}</div></div>`;
+}
+function stats(){
+  const P=data.players,me=P.find(p=>p.ign===ign());
+  const cnt=r=>P.filter(p=>p.main_role===r).length,max=Math.max(1,...ROLES.map(cnt));
+  return `<h2>Your Queue Profile</h2><div class="card">${me?`<b>${esc(me.ign)}</b> <span class="mut">· ${me.main_role} / ${me.side_role}${me.is_flex?' · Flex':''}</span><br>
+  <span class="mut">Status: ${me.assigned_team?`${me.assigned_team} — ${me.assigned_role}`:'Substitute pool'}</span>`:`<b>${esc(ign())}</b> <span class="mut">· Not found in current ledger</span>${data.version?'<div class="row"><button class="btn flat" id="rereg">Register again</button></div>':''}`}</div>
+  <h2>Lane Congestion · ${P.length} Registered</h2><div class="card">${ROLES.map(r=>`<div class="bar"><b>${r}</b><span><i style="width:${cnt(r)/max*100}%"></i></span><em>${cnt(r)}</em></div>`).join('')}</div>`;
+}
+function adminHub(){
+  const P=data.players,s=P.find(p=>p.id===sel);
+  return `<h2>Owner Control Hub</h2><div class="card">
+  <div class="row"><select id="assign"><option value="">[ Assign To... ]</option><option>Team A</option><option>Team B</option></select>
+  <button class="btn flat" id="reset">[ Reset ]</button></div>
+  <div class="mut" style="font-size:13px">${s?`Selected: ${esc(s.ign)}`:'Select a player (table or roster) to assign or override.'}</div>
+  ${s?`<div class="row"><select id="ov-team"><option value="">Bench (Substitute)</option><option>Team A</option><option>Team B</option></select>
+  <select id="ov-role"><option value="">Auto role</option>${ROLES.map(r=>`<option>${r}</option>`).join('')}</select>
+  <button class="btn" id="ov-go">Apply</button></div>`:''}
+  ${msg?`<div class="err">${esc(msg)}</div>`:''}
+  <div style="overflow-x:auto;margin-top:10px"><table><thead><tr><th>IGN</th><th>Main</th><th>Side</th><th>Slot</th><th></th></tr></thead><tbody>
+  ${P.map(p=>`<tr data-sel="${p.id}" style="cursor:pointer;${sel===p.id?'background:var(--card2)':''}"><td>${esc(p.ign)}</td><td>${p.main_role}</td><td>${p.side_role}</td><td class="mut">${p.assigned_team?p.assigned_team+' · '+p.assigned_role:'—'}</td>
+  <td><button class="x" data-del="${p.id}" title="Drop">✕ Drop</button></td></tr>`).join('')}</tbody></table></div></div>`;
+}
+function form(){
+  const o=OPT.map(r=>`<option>${r}</option>`).join('');
+  return `<h2>Player Registration</h2><div class="card"><div class="mut" style="margin-bottom:8px">${data.players.length} Players Registered</div>
+  <div class="row"><input type="text" id="f-ign" placeholder="In-Game Name" maxlength="24"></div>
+  <div class="row"><label>Main role<select id="f-main">${o}</select></label><label>Side role<select id="f-side">${o}</select></label></div>
+  <div class="row"><label><input type="checkbox" id="f-flex"> Flex (multi-role)</label><button class="btn" id="f-go">Register</button></div>
+  <div class="err" id="f-err"></div></div>`;
+}
+function render(){
+  $('#n-home').classList.toggle('on',view==='home');$('#n-teams').classList.toggle('on',view==='teams');
+  $('#login').textContent=admin()?'Logout':'Login';
+  let h=hero();
+  if(admin())h+=adminHub();
+  if(view==='home'){h+=ign()?stats():(admin()?'':form());}
+  if(ign()||admin()||view==='teams')h+=pane();
+  const a=$('#app'),y=scrollY;
+  if(a._h!==h){
+    // keep typed form values across live re-renders
+    const keep=['f-ign','f-main','f-side'].map(i=>$('#'+i)?.value),fx=$('#f-flex')?.checked;
+    a.innerHTML=h;a._h=h;
+    ['f-ign','f-main','f-side'].forEach((i,n)=>{if($('#'+i)&&keep[n]!=null)$('#'+i).value=keep[n]});
+    if($('#f-flex')&&fx)$('#f-flex').checked=true;
+    scrollTo(0,y);
+  }
+}
+document.addEventListener('click',e=>{
+  const t=e.target;
+  if(t.id==='n-home'){view='home';render()}
+  if(t.id==='n-teams'){view='teams';render()}
+  if(t.id==='login'){
+    if(admin())return logout();
+    const k=prompt('Owner token');if(!k)return;
+    fetch('/api/admin/login',{method:'POST',headers:{'x-owner-token':k}}).then(r=>{
+      if(r.ok){localStorage.setItem('df_token',k);localStorage.setItem('df_admin','true');render()}else alert('Invalid token')}).catch(()=>alert('Invalid token'));
+  }
+  if(t.dataset.del){e.stopPropagation();if(confirm('Remove this player?'))act('/api/admin/delete',{id:+t.dataset.del});return}
+  const s=t.closest('[data-sel]');if(s){sel=+s.dataset.sel;msg='';render()}
+  if(t.id==='reset')act('/api/admin/reset',{});
+  if(t.id==='ov-go')act('/api/admin/place',{id:sel,team:$('#ov-team').value||null,role:$('#ov-role').value||undefined});
+  if(t.id==='f-go')register();
+  if(t.id==='rereg'){localStorage.removeItem('registered_ign');render()}
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='assign'&&e.target.value){if(sel)act('/api/admin/place',{id:sel,team:e.target.value});else{msg='Select a player first';render()}}
+});
+async function register(){
+  const v=$('#f-ign').value.trim();
+  if(!v){$('#f-err').textContent='Enter an IGN';return}
+  const r=await api('/api/register',{ign:v,main_role:$('#f-main').value,side_role:$('#f-side').value,is_flex:$('#f-flex').checked});
+  if(!r.ok){$('#f-err').textContent=r.j.error||'Error';return}
+  localStorage.setItem('registered_ign',v);
+  location.href='/';
+}
+render();                 // instant draw from cached data (first poll below loads fresh data)
+setInterval(poll,5000);poll();
+</script></body></html>
