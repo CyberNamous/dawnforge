@@ -128,6 +128,7 @@ function adminHub(){
   return `<h2>Owner Control Hub</h2><div class="card">
   <div class="row"><select id="assign"><option value="">[ Assign To... ]</option><option>Team A</option><option>Team B</option></select>
   <button class="btn flat" id="reset">[ Reset ]</button></div>
+  <div class="row"><button class="btn" id="rand-all">🎲 Randomize All</button><button class="btn flat" id="rand-fill">Fill Open Slots</button></div>
   <div class="mut" style="font-size:13px">${s?`Selected: ${esc(s.ign)}`:'Select a player (table or roster) to assign or override.'}</div>
   ${s?`<div class="row"><select id="ov-team"><option value="">Bench (Substitute)</option><option>Team A</option><option>Team B</option></select>
   <select id="ov-role"><option value="">Auto role</option>${ROLES.map(r=>`<option>${r}</option>`).join('')}</select>
@@ -175,6 +176,8 @@ document.addEventListener('click',e=>{
   if(t.dataset.del){e.stopPropagation();if(confirm('Remove this player?'))act('/api/admin/delete',{id:+t.dataset.del});return}
   const s=t.closest('[data-sel]');if(s){sel=+s.dataset.sel;msg='';render()}
   if(t.id==='reset')act('/api/admin/reset',{});
+  if(t.id==='rand-all'&&confirm('Reshuffle everyone? Current placements will be replaced.'))act('/api/admin/randomize',{keep:false});
+  if(t.id==='rand-fill')act('/api/admin/randomize',{keep:true});
   if(t.id==='ov-go')act('/api/admin/place',{id:sel,team:$('#ov-team').value||null,role:$('#ov-role').value||undefined});
   if(t.id==='f-go')register();
   if(t.id==='rereg'){localStorage.removeItem('registered_ign');render()}
