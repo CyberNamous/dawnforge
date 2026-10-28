@@ -8,6 +8,6 @@
   // Static frontend; the Worker only runs first for /api/*
   "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
   "d1_databases": [
-    { "binding": "DB", "database_name": "dawnforge-db", "database_id": "REPLACE_WITH_YOUR_D1_ID" }
+    { "binding": "DB", "database_name": "dawnforge-db", "database_id": "bfd9107e-535b-4fd0-96f2-b2fcfa7d3bfb" }
   ]
 }
