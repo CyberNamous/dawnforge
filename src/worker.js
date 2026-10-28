@@ -23,6 +23,47 @@ async function place(env, id, team, role) {
   return true;
 }
 
+const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+// Random, role-aware distribution into 2 teams x 5 roles.
+// keep=true  -> only fill open slots with benched players
+// keep=false -> clear everything and reshuffle all players
+async function randomize(env, keep) {
+  const all = (await env.DB.prepare('SELECT id, main_role, side_role, is_flex, assigned_team, assigned_role FROM players').all()).results;
+  const TEAMS = ['Team A', 'Team B'];
+  const open = { 'Team A': new Set(ROLES), 'Team B': new Set(ROLES) };
+  const count = { 'Team A': 0, 'Team B': 0 };
+  let pool = all;
+  if (keep) {
+    all.filter(p => p.assigned_team).forEach(p => { open[p.assigned_team].delete(p.assigned_role); count[p.assigned_team]++; });
+    pool = all.filter(p => !p.assigned_team);
+  }
+  shuffle(pool);
+  const cap = Math.ceil(Math.min(10, all.length) / 2); // keeps team sizes even when fewer than 10 players
+  const result = new Map();
+  // put player in `role` on the emptier team that still has that role open
+  const put = (p, role) => {
+    const teams = TEAMS.filter(t => open[t].has(role) && count[t] < cap);
+    if (!teams.length) return false;
+    const min = Math.min(...teams.map(t => count[t]));
+    const t = shuffle(teams.filter(x => count[x] === min))[0];
+    open[t].delete(role); count[t]++; result.set(p.id, [t, role]);
+    return true;
+  };
+  const left = () => pool.filter(p => !result.has(p.id));
+  const any = (p) => { for (const r of shuffle([...ROLES])) if (put(p, r)) break; };
+  left().forEach(p => ROLES.includes(p.main_role) && put(p, p.main_role)); // 1) main role
+  left().forEach(p => ROLES.includes(p.side_role) && put(p, p.side_role)); // 2) side role
+  left().filter(p => p.is_flex).forEach(any);                              // 3) flex players, any role
+  left().forEach(any);                                                     // 4) fill remaining slots; rest stay subs
+  const st = [];
+  if (!keep) st.push(env.DB.prepare('UPDATE players SET assigned_team=NULL, assigned_role=NULL'));
+  for (const [id, [t, r]] of result) st.push(env.DB.prepare('UPDATE players SET assigned_team=?, assigned_role=? WHERE id=?').bind(t, r, id));
+  st.push(bump(env));
+  await env.DB.batch(st);
+  return result.size;
+}
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
@@ -63,6 +104,10 @@ export default {
         if (path === '/api/admin/reset') {
           await env.DB.batch([env.DB.prepare('UPDATE players SET assigned_team=NULL, assigned_role=NULL'), bump(env)]);
           return json({ ok: true });
+        }
+        if (path === '/api/admin/randomize') { // { keep: true } fills open slots only; otherwise full reshuffle
+          const placed = await randomize(env, !!b.keep);
+          return json({ ok: true, placed });
         }
         if (path === '/api/admin/place') { // team: 'Team A' | 'Team B' | null (bench); role optional
           if (b.team && !['Team A', 'Team B'].includes(b.team)) return json({ error: 'Bad team' }, 400);
